@@ -11,10 +11,15 @@ import UIKit
 class ActionItemViewController: UITableViewController {
     
     var itemArray = ["Read", "Go to the Gym", "Learn new skill"]
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let items = UserDefaults.standard.array(forKey: "itemArray") as? [String] {
+            
+        }
     
     }
 
@@ -64,6 +69,8 @@ class ActionItemViewController: UITableViewController {
             
             self.itemArray.append(textField.text!)
             
+            self.defaults.set(self.itemArray, forKey: "ActionItemArray")
+            
             self.tableView.reloadData()
           
         }
@@ -72,7 +79,7 @@ class ActionItemViewController: UITableViewController {
             alertTextField.placeholder = "Create New Action Item"
             textField = alertTextField
             
-            print(alertTextField.text)
+         
             
         }
         
