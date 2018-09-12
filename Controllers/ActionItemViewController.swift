@@ -10,14 +10,28 @@ import UIKit
 
 class ActionItemViewController: UITableViewController {
     
-    var itemArray = ["Read", "Go to the Gym", "Learn new skill"]
+    var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = UserDefaults.standard.array(forKey: "itemArray") as? [String] {
+        let newItem = Item()
+        newItem.title = "Read"
+        itemArray.append(newItem)
+        
+        let newItem2 = Item()
+        newItem2.title = "Work Out"
+        itemArray.append(newItem2)
+        
+        let newItem3 = Item()
+        newItem3.title = "Journal"
+        itemArray.append(newItem3)
+        
+        
+        if let items = defaults.array(forKey: "ActionItemArray") as? [Item] { itemArray = items
+    
             
         }
     
@@ -32,9 +46,23 @@ class ActionItemViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "ActionItemCell")
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ActionItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = item.title
+        
+        //Teernary operator ==>
+        // value = condition ? valueIfTrue : valueIfFales
+        
+        cell.accessoryType = item.done ? .checkmark : .none
+
+        
+        //if Item.done == true {
+           // cell.accesoryType = .checkmark
+       // } else {
+        //    cell.accessoryType = .none
+       // }
         
         return cell
     }
@@ -44,6 +72,11 @@ class ActionItemViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
         
+        itemArray[indexPath.row].done == false {
+            itemArray[indexPath.row].done = true
+            { else {
+               itemArray[indexPath.row].done = false
+                }
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
@@ -52,6 +85,7 @@ class ActionItemViewController: UITableViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
         
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -67,7 +101,10 @@ class ActionItemViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the Add Item button.
             
-            self.itemArray.append(textField.text!)
+            let newItem = Item()
+            newItem.title = textField.text!
+            
+            self.itemArray.append(newItem)
             
             self.defaults.set(self.itemArray, forKey: "ActionItemArray")
             
